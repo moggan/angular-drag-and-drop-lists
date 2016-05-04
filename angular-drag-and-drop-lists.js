@@ -309,10 +309,16 @@ angular.module('dndLists', [])
           if (listItemNode.parentNode === listNode && listItemNode !== placeholderNode) {
             // If the mouse pointer is in the upper half of the child element,
             // we place it before the child element, otherwise below it.
-            if (isMouseInFirstHalf(event, listItemNode)) {
+            if (!isMouseInFirstHalf(event, listItemNode)) {
+              listItemNode = listItemNode.nextSibling;
+              if (listItemNode === placeholderNode) {
+                listItemNode = false;
+              }
+            }
+            
+            if (listItemNode && placeholderNode.lastSibling !== listItemNode) {
+              placeholderNode.lastSibling = listItemNode;
               listNode.insertBefore(placeholderNode, listItemNode);
-            } else {
-              listNode.insertBefore(placeholderNode, listItemNode.nextSibling);
             }
           }
         } else {
